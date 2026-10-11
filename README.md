@@ -41,19 +41,23 @@ Your task is to containerize this existing application using Docker. You need to
 - To build the docker image run the command:
 
 ```bash
-
+docker build -t kentrel-docker-app .
 ```
 
 - To run your docker container in port 3000 run the command:
 
 ```bash
-
+docker run -d --name kentrel-docker-app -p 3000:3000 kentrel-docker-app
 ```
 
 ## Reflection Question
 **Answer the following question in the space below**: How does containerization with Docker differ from using virtual machines, and why might a development team choose Docker containers over VMs for deploying applications like the one you just containerized?
 
+Docker containers package an application with its runtime and dependencies while sharing the kernel of the operating system that runs the Docker engine. A virtual machine virtualizes hardware and runs a complete guest operating system with its own kernel. Containers generally use fewer resources and start faster because each application does not need a separate operating system. On macOS and Windows, Docker Desktop typically uses a Linux virtual machine to run Linux containers, so containers and VMs can work together.
 
+For this Express application, the image includes Node.js, the installed dependencies, and the application files. Team members can run the same image without installing Node.js directly on their computers. This helps reduce differences between development, testing, and deployment environments. A development team might choose Docker because images are easy to distribute, deployment steps can be repeated, and multiple application instances can run efficiently. The team still needs to maintain its images and dependencies and configure networking correctly. VMs may be a better choice when an application requires a different operating-system kernel or stronger separation between workloads.
+
+Reference: [Docker documentation on containers and virtual machines](https://docs.docker.com/get-started/docker-concepts/the-basics/what-is-a-container/).
 
 ## Application Requirements for Docker
 
@@ -92,3 +96,35 @@ docker-assignment/
 ```
 
 Good luck with your Docker containerization!
+
+## Container Management
+
+Run these commands after building and starting the container:
+
+```bash
+# List running containers.
+docker ps
+
+# Stop the container gracefully.
+docker stop kentrel-docker-app
+
+# Restart the existing stopped container.
+docker start kentrel-docker-app
+
+# Stop it before removing it.
+docker stop kentrel-docker-app
+
+# Remove the stopped container; the image remains available.
+docker rm kentrel-docker-app
+```
+
+## Screenshots and Verification Status
+
+Direct Node.js checks passed for `/`, `/api/status`, and `/health`; these are application checks, not container checks. Docker is unavailable in the preparation environment, so the image build and container run have not been verified here. The commands above are the planned commands to execute on a machine with Docker Desktop running.
+
+After running the container, open both URLs and save real browser screenshots in a `screenshots` folder:
+
+- `http://localhost:3000` → `screenshots/application.png`
+- `http://localhost:3000/api/status` → `screenshots/api-status.png`
+
+Commit the screenshots after verifying both pages. The starter application displays a containerization success message even when run directly with Node.js, so that message alone does not prove Docker was used.
